@@ -8,7 +8,8 @@ Provide following parameters as data attribute to the input:
 * uploadUrl.
 * uploadFileExtension.
 * imageDisplayHeight.
-* Any other additional data you wish to post along with file. For example > userId
+* Any other additional data you wish to post along with file. For example:
+> userId
 
 # example
 ```html
