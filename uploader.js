@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var handleAllConfigurableInputs = function() {
         document.querySelectorAll("input[type=file].custom-configurable-uploader").forEach(function(input){
             var uploader_holder = document.createElement('div');
-            uploader_holder.innerHTML = "<div class='custom-configurable_uploader progress_outer' style='border: 1px solid #000;display: none;width: 280px; margin-top: 5px;'><div class='custom-configurable_uploader progress' style=' width: 0%;background: green; height: 20px;'></div></div>";
+            uploader_holder.innerHTML = "<div class='custom-configurable_uploader progress_outer' style='border: 1px solid black;display: none;width: 280px; margin-top: 5px;'><div class='custom-configurable_uploader progress' style=' width: 0%;background: #0091ca; height: 6px;'></div></div>";
             var new_img_tag = document.createElement('img');
             new_img_tag.style.display = "none";
             new_img_tag.style.cssText = "display: none; width: auto; height: " + (input.dataset.imageDisplayHeight || "100 px") + ";";
