@@ -1,9 +1,9 @@
-
 w_url = window.URL || window.webkitURL;
+
 var handleAllConfigurableInputs = function() {
   document.querySelectorAll("input[type=file].custom-configurable-uploader").forEach(function(input){
     var uploader_holder = document.createElement('div');
-    uploader_holder.innerHTML = "<div class='custom-configurable_uploader progress_outer'><div class='custom-configurable_uploader progress'></div></div>";
+    uploader_holder.innerHTML = "<div class='custom-configurable_uploader progress_outer' style='border: 1px solid #000;display: none;width: 280px; margin-top: 5px;'><div class='custom-configurable_uploader progress' style=' width: 0%;background: green; height: 20px;'></div></div>";
     var new_img_tag = document.createElement('img');
     new_img_tag.style.display = "none";
     new_img_tag.style.cssText = "display: none; width: auto; height: " + (input.dataset.imageDisplayHeight || "100 px") + ";";
@@ -22,25 +22,25 @@ function attachEventToTheFileInput(input) {
     input.addEventListener('change',function(e){
       e.preventDefault();
       var input = e.target;
+      var image = getMyImgElement(input);
       if (input.files[0]) {
-        var image = getMyImgElement(input);
         image.onload = function() {
           image.style.display = "block";
         };
         image.onerror = function() {
-          alert('Invalid image');
           image.src = "";
           image.style.display = "none";
         };
-        debugger;
         image.src = window_url.createObjectURL(input.files[0]);    
+      } else {
+        image.src = "";
+        image.style.display = "none";
       }
     });   
 }
   
-function uploadSelectedfile(selected_file, url, progress_bar_container, additiona_data) {
+function uploadSelectedfile(selected_file, url, progress_bar_container, additiona_data, upload_file_extension) {
     var formData = new FormData();
-    //formData.append("userFile", selected_file);
     // additional data
     Object.keys(additiona_data).forEach(function(key) {
     	formData.append(key, additiona_data[key]);
@@ -76,7 +76,9 @@ function uploadSelectedfile(selected_file, url, progress_bar_container, addition
     reader.onload = function() {
       var arrayBuffer = reader.result
       var bytes = new Uint8Array(arrayBuffer);
-      var customized_file = new File(bytes, "userfile.jpeg", {type: "image/jpeg"});
+      var file_name =  upload_file_extension ? "userfile." + upload_file_extension : selected_file.name;
+      var file_type =  selected_file.type.substr(0, selected_file.type.lastIndexOf('/')) + (upload_file_extension || selected_file.type.substr(selected_file.type.lastIndexOf('/')+ 1, selected_file.type.length));
+      var customized_file = new File(bytes, file_name, {type: "image/jpeg"});
       formData.append("userFile", customized_file);
       xhr.send(formData);
     }  
@@ -105,9 +107,11 @@ function attachEventToUploadButton(button) {
     var input = e.target.previousSibling;
     if (input && input.files && input.files[0]) {
       var additional_data = input.dataset;
+      var upload_file_extension = input.dataset.uploadFileExtension;
       delete additional_data["imageDisplayHeight"];
       delete additional_data["uploadUrl"];
-    	uploadSelectedfile(input.files[0], input.dataset.uploadUrl, input.previousSibling.lastChild, additional_data);
+      delete additional_data["uploadFileExtension"]
+    	uploadSelectedfile(input.files[0], input.dataset.uploadUrl, input.previousSibling.lastChild, additional_data, upload_file_extension);
     }
   });
 }
