@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
             var bytes = new Uint8Array(arrayBuffer);
             var file_name =  upload_file_extension ? "userfile." + upload_file_extension : selected_file.name;
             var file_type =  selected_file.type.substr(0, selected_file.type.lastIndexOf('/')) + (upload_file_extension || selected_file.type.substr(selected_file.type.lastIndexOf('/')+ 1, selected_file.type.length));
-            var customized_file = new File(bytes, file_name, {type: "image/jpeg"});
+            var customized_file = new File(bytes, file_name, {type: file_type});
             formData.append("userFile", customized_file);
             xhr.send(formData);
             }  
